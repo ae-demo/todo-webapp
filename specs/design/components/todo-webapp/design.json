@@ -7,20 +7,45 @@
   "appPath": "todo-webapp",
   "entrypoint": "deployment/web-application",
   "exposure": "internet",
+  "description": "Single-page React app where a signed-in user manages their personal task list: create, view, edit, complete, delete, and sort/filter tasks that optionally carry a due date, with overdue tasks visually highlighted. Holds no task data itself — all reads and writes go through todo-api.",
   "dependencies": [
     {
       "kind": "component",
       "name": "todo-api",
-      "description": "Backend API for creating, listing, editing, completing, and deleting the signed-in user's own tasks, including due dates and sort/filter support."
+      "description": "Backend API for creating, listing, editing, completing, and deleting the signed-in user's own tasks, including due dates and sort/filter support.",
+      "wiring": {
+        "endpoint": {
+          "component": "todo-webapp-todo-api",
+          "name": "http",
+          "visibility": "project",
+          "envBindings": {
+            "address": "TODO_API_URL"
+          }
+        }
+      }
     },
     {
       "kind": "platform-resource",
       "name": "thunder-auth",
+      "description": "Thunder-issued OIDC client used for browser sign-in (OIDC + PKCE) so the user's task list is private to them.",
       "resourceType": "thunder-app",
-      "parameters": { "scopes": "openid profile email" },
-      "description": "Thunder-issued OIDC client used for browser sign-in (OIDC + PKCE) so the user's task list is private to them."
+      "parameters": {
+        "scopes": "openid profile email"
+      },
+      "wiring": {
+        "ref": "todo-webapp-thunder-auth",
+        "envBindings": {
+          "client_id": "THUNDER_AUTH_CLIENT_ID",
+          "issuer": "THUNDER_AUTH_ISSUER",
+          "jwks_url": "THUNDER_AUTH_JWKS_URL",
+          "scopes": "THUNDER_AUTH_SCOPES"
+        }
+      }
     }
   ],
-  "description": "Single-page React app where a signed-in user manages their personal task list: create, view, edit, complete, delete, and sort/filter tasks that optionally carry a due date, with overdue tasks visually highlighted. Holds no task data itself — all reads and writes go through todo-api.",
-  "skillsPinned": ["wireframes", "react-webapp", "thunder-authentication"]
+  "skillsPinned": [
+    "wireframes",
+    "react-webapp",
+    "thunder-authentication"
+  ]
 }
