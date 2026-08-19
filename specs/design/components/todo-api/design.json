@@ -1,0 +1,27 @@
+{
+  "name": "todo-api",
+  "type": "service",
+  "version": "0.1.0",
+  "language": "Ballerina",
+  "buildpack": "docker",
+  "appPath": "todo-api",
+  "entrypoint": "deployment/service",
+  "exposure": "internet",
+  "dependencies": [
+    {
+      "kind": "platform-resource",
+      "name": "todo-db",
+      "resourceType": "postgres-cnpg",
+      "description": "Stores each task (title, optional due date, completed flag, owning user id, timestamps)."
+    },
+    {
+      "kind": "platform-resource",
+      "name": "thunder-auth",
+      "resourceType": "thunder-app",
+      "parameters": { "scopes": "openid profile email" },
+      "description": "Validates the caller's Thunder-issued bearer token and resolves the signed-in user's id used to scope all task access."
+    }
+  ],
+  "description": "Ballerina REST API backing the todo webapp: exposes CRUD for the signed-in user's own tasks, including optional due dates, completion state, and sort/filter query support on the list endpoint. Every operation is scoped to the caller's own user id; it never returns or modifies another user's tasks, and it issues no tokens itself.",
+  "skillsPinned": ["openapi-conventions", "ballerina", "api-management", "thunder-authentication"]
+}

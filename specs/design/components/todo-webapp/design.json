@@ -1,0 +1,26 @@
+{
+  "name": "todo-webapp",
+  "type": "web-application",
+  "version": "0.1.0",
+  "language": "TypeScript",
+  "buildpack": "docker",
+  "appPath": "todo-webapp",
+  "entrypoint": "deployment/web-application",
+  "exposure": "internet",
+  "dependencies": [
+    {
+      "kind": "component",
+      "name": "todo-api",
+      "description": "Backend API for creating, listing, editing, completing, and deleting the signed-in user's own tasks, including due dates and sort/filter support."
+    },
+    {
+      "kind": "platform-resource",
+      "name": "thunder-auth",
+      "resourceType": "thunder-app",
+      "parameters": { "scopes": "openid profile email" },
+      "description": "Thunder-issued OIDC client used for browser sign-in (OIDC + PKCE) so the user's task list is private to them."
+    }
+  ],
+  "description": "Single-page React app where a signed-in user manages their personal task list: create, view, edit, complete, delete, and sort/filter tasks that optionally carry a due date, with overdue tasks visually highlighted. Holds no task data itself — all reads and writes go through todo-api.",
+  "skillsPinned": ["wireframes", "react-webapp", "thunder-authentication"]
+}
